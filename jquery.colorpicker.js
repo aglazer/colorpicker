@@ -2329,16 +2329,25 @@
 					this.element.val(this._formatColor(this.options.colorFormat, this.color));
 
                     var elementId = this.element[0].id;
-                    var rgba = this._formatColor(this.options.colorFormat, this.color);
-                    rgba = rgba.match(/\d+/g);
+//                    var rgba = this._formatColor(this.options.colorFormat, this.color);
+//                    rgba = rgba.match(/\d+/g);
+
+//                    var rgbRegex = /(^rgb\((\d+),\s*(\d+),\s*(\d+)\)$)|(^rgba\((\d+),\s*(\d+),\s*(\d+)(,\s*\d+\.\d+)*\)$)/;
+//                    rgba = rgba.match(rgbRegex);
+                    var rgba = this.color.getRGB();
+                    rgba.r = rgba.r * 255.0;
+                    rgba.g = rgba.g * 255.0;
+                    rgba.b = rgba.b * 255.0;
+                    rgba.a = this.color.getAlpha();
+
 
                     var scope = angular.element(this.element).scope();
                     scope.$apply(function(){
-                        eval('scope.property.stateProperties.' + elementId + '.r = rgba[0]');
-                        eval('scope.property.stateProperties.' + elementId + '.g = rgba[1]');
-                        eval('scope.property.stateProperties.' + elementId + '.b = rgba[2]');
-                        eval('scope.property.stateProperties.' + elementId + '.a = rgba[3]');
-                        eval('scope.property.stateProperties.' + elementId + '.a = rgba[3]');
+                        eval('scope.property.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
+                        eval('scope.property.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
+                        eval('scope.property.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
+                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
+//                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba[4])');
                     });
 
                     scope.saveModifiedViewElement(scope.element);
