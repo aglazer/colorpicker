@@ -2331,20 +2331,17 @@
                     var elementId = this.element[0].id;
                     var rgba = this._formatColor(this.options.colorFormat, this.color);
                     rgba = rgba.match(/\d+/g);
-//                    $('#' + elementId + '_R').val(rgba[0]).trigger('change');
-//                    $('#' + elementId + '_G').val(rgba[1]).trigger('change');
-//                    $('#' + elementId + '_B').val(rgba[2]).trigger('change');
-//                    $('#' + elementId + '_A').val(rgba[3]).trigger('change');
 
-
-                    var scope = angular.element('#' + elementId + '_R').scope();
+                    var scope = angular.element(this.element).scope();
                     scope.$apply(function(){
-                        scope.property.stateProperties.textColor.r = rgba[0];
-                        scope.property.stateProperties.textColor.g = rgba[1];
-                        scope.property.stateProperties.textColor.b = rgba[2];
-                        scope.property.stateProperties.textColor.a = rgba[3];
+                        eval('scope.property.stateProperties.' + elementId + '.r = rgba[0]');
+                        eval('scope.property.stateProperties.' + elementId + '.g = rgba[1]');
+                        eval('scope.property.stateProperties.' + elementId + '.b = rgba[2]');
+                        eval('scope.property.stateProperties.' + elementId + '.a = rgba[3]');
+                        eval('scope.property.stateProperties.' + elementId + '.a = rgba[3]');
                     });
-//                    this.element.val("aaron");
+
+                    scope.saveModifiedViewElement(scope.element);
 				}
 
 				this._setImageBackground();
