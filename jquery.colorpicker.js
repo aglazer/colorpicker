@@ -2346,10 +2346,10 @@
 
                     var scope = angular.element(this.element).scope();
                     scope.$apply(function(){
-                        eval('scope.property.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
-                        eval('scope.property.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
-                        eval('scope.property.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
-                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
+                        eval('scope.state.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
+                        eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
+                        eval('scope.state.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
+                        eval('scope.state.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
 //                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba[4])');
                     });
 
