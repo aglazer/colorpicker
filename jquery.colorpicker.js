@@ -763,7 +763,7 @@
 
 					case 'a':
 						y = (1 - inst.color.getAlpha()) * div.height();
-						$(e).css('background-color', inst.color.copy().normalize().toCSS());
+						$(e).css('background-color', inst.color.copy().toCSS());
 						break;
 					}
 
@@ -982,7 +982,6 @@
 				this.update = function () {
 					this.repaint();
 				};
-
 			},
 
 			cmyk: function (inst) {
@@ -1028,7 +1027,6 @@
 				this.update = function () {
 					this.repaint();
 				};
-
 			},
 
 			alpha: function (inst) {
@@ -1247,6 +1245,7 @@
 							cmyk:	{c: 0, m: 0, y: 0, k: 1}
 						},
 				a = 1,
+				illuminant = [0.9504285, 1, 1.0889],	// CIE-L*ab D65/2' 1931
 				args = arguments,
 				_clip = function(v) {
 					if (isNaN(v) || v === null) {
@@ -1453,11 +1452,10 @@
 						b: hue_to_rgb(var_1, var_2, hsl.h - (1 / 3))
 					};
 				},
-				_xyz_to_lab = function(xyz) {
-					// CIE-L*ab D65 1931
-					var x = xyz.x / 0.95047,
-						y = xyz.y,
-						z = xyz.z / 1.08883;
+				_xyz_to_lab = function(xyz) {					
+					var x = xyz.x / illuminant[0],
+						y = xyz.y / illuminant[1],
+						z = xyz.z / illuminant[2];
 
 					x = (x > 0.008856) ? Math.pow(x, (1/3)) : (7.787 * x) + (16/116);
 					y = (y > 0.008856) ? Math.pow(y, (1/3)) : (7.787 * y) + (16/116);
@@ -1488,9 +1486,9 @@
 					xyz.y = (Math.pow(xyz.y, 3) > 0.008856) ? Math.pow(xyz.y, 3) : (xyz.y - 16 / 116) / 7.787;
 					xyz.z = (Math.pow(xyz.z, 3) > 0.008856) ? Math.pow(xyz.z, 3) : (xyz.z - 16 / 116) / 7.787;
 
-					xyz.x *= 0.95047;
-					xyz.y *= 1;
-					xyz.z *= 1.08883;
+					xyz.x *= illuminant[0];
+					xyz.y *= illuminant[1];
+					xyz.z *= illuminant[2];
 
 					return xyz;
 				},
@@ -1865,7 +1863,7 @@
 
 			++_colorpicker_index;
 
-			that.widgetEventPrefix = 'color';
+			that.widgetEventPrefix = 'colorpicker';
 
 			that.opened		= false;
 			that.generated	= false;
