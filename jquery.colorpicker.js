@@ -19,7 +19,9 @@
 
 		_container_popup = '<div class="ui-colorpicker ui-colorpicker-dialog ui-dialog ui-widget ui-widget-content ui-corner-all" style="display: none;"></div>',
 
-		_container_inline = '<div class="ui-colorpicker ui-colorpicker-inline ui-dialog ui-widget ui-widget-content ui-corner-all"></div>',
+		_container_inlineFrame = '<div class="ui-colorpicker ui-colorpicker-inline ui-dialog ui-widget ui-widget-content ui-corner-all"></div>',
+
+		_container_inline = '<div class="ui-colorpicker ui-colorpicker-inline"></div>',
 
 		_parts_lists = {
 			'full':			['header', 'map', 'bar', 'hex', 'hsv', 'rgb', 'alpha', 'lab', 'cmyk', 'preview', 'swatches', 'footer'],
@@ -107,7 +109,8 @@
 			cell = layout[index = 0];
 			for (y = 0; y < height; ++y) {
 				html += '<tr>';
-				for (x = 0; x < width; x) {
+                x = 0;
+                while (x < width) {
 					if (typeof cell !== 'undefined' && x == cell.pos[0] && y == cell.pos[1]) {
 						// Create a "real" cell
 						html += callback(cell, x, y);
@@ -954,7 +957,7 @@
 
 					part = $(html()).appendTo($('.ui-colorpicker-lab-container', inst.dialog));
 
-					$('.ui-colorpicker-number', part).on('change keyup', function (event) {
+					$('.ui-colorpicker-number', part).bind('change keyup', function (event) {
 						inst.color.setLAB(
 							parseInt($('.ui-colorpicker-lab-l .ui-colorpicker-number', part).val(), 10) / 100,
 							(parseInt($('.ui-colorpicker-lab-a .ui-colorpicker-number', part).val(), 10) + 128) / 255,
@@ -1003,7 +1006,7 @@
 				this.init = function () {
 					part = $(html()).appendTo($('.ui-colorpicker-cmyk-container', inst.dialog));
 
-					$('.ui-colorpicker-number', part).on('change keyup', function (event) {
+					$('.ui-colorpicker-number', part).bind('change keyup', function (event) {
 						inst.color.setCMYK(
 							parseInt($('.ui-colorpicker-cmyk-c .ui-colorpicker-number', part).val(), 10) / 100,
 							parseInt($('.ui-colorpicker-cmyk-m .ui-colorpicker-number', part).val(), 10) / 100,
@@ -1809,6 +1812,7 @@
 			altOnChange:		true,		// true to update on each change, false to update only on close.
 			altProperties:		'background-color',	// comma separated list of any of 'background-color', 'color', 'border-color', 'outline-color'
 			autoOpen:			false,		// Open dialog automatically upon creation
+			buttonClass:		null,		// If set, the button will get this/these classname(s).
 			buttonColorize:		false,
 			buttonImage:		'images/ui-colorpicker.png',
 			buttonImageOnly:	false,
@@ -1821,6 +1825,7 @@
 			duration:			'fast',
 			hsv:				true,		// Show HSV controls and modes
 			inline:				true,		// Show any divs as inline by default
+			inlineFrame:		true,		// Show a border and background when inline.
 			layout: {
 				map:		[0, 0, 1, 5],	// Left, Top, Width, Height (in table cells).
 				bar:		[1, 0, 1, 5],
@@ -1843,7 +1848,7 @@
 			showCancelButton:	true,
 			showNoneButton:		false,
 			showCloseButton:	true,
-			showOn:				'focus',	// 'focus', 'button', 'both'
+			showOn:				'focus click',	// 'focus', 'click', 'button', 'both'
 			showOptions:		{},
 			swatches:			null,		// null for default or kv-object or names swatches set
 			swatchesWidth:		84,			// width (in number of pixels) of swatches box.
@@ -1876,9 +1881,8 @@
 			that.overlay	= null;
 
 			that.mode		= that.options.mode;
-
-			if (this.element[0].nodeName.toLowerCase() === 'input' || !that.options.inline) {
-				that._setColor(that.element.val());
+			if (that.element.is('input') || that.options.inline === false) {
+				that._setColor(that.element.is('input') ? that.element.val() : that.options.color);
 
 				this._callback('init');
 
@@ -1900,6 +1904,8 @@
 					// Check if clicked on button
 					var p,
 						parents = $(event.target).parents();
+                    // add the event.target in case of buttonImageOnly and closeOnOutside both are set to true
+                    parents.push(event.target);
 					for (p = 0; p <= parents.length; ++p) {
 						if (that.button !== null && parents[p] === that.button[0]) {
 							return;
@@ -1920,12 +1926,17 @@
 					}
 				});
 
-				if (that.options.showOn === 'focus' || that.options.showOn === 'both') {
-					that.element.on('focus click', function () {
+				if (/\bfocus|both\b/.test(that.options.showOn)) {
+					that.element.bind('focus', function () {
 						that.open();
 					});
 				}
-				if (that.options.showOn === 'button' || that.options.showOn === 'both') {
+				if (/\bclick|both\b/.test(that.options.showOn)) {
+					that.element.bind('click', function () {
+						that.open();
+					});
+				}
+				if (/\bbutton|both\b/.test(that.options.showOn)) {
 					if (that.options.buttonImage !== '') {
 						text = that.options.buttonText || that._getRegional('button');
 
@@ -1934,6 +1945,9 @@
 							'alt':		text,
 							'title':	text
 						});
+						if (that.options.buttonClass) {
+							that.image.attr('class', that.options.buttonClass);
+						}
 
 						that._setImageBackground();
 					}
@@ -1967,7 +1981,7 @@
 			} else {
 				that.inline = true;
 
-				$(this.element).html(_container_inline);
+				$(this.element).html(that.options.inlineFrame ? _container_inlineFrame : _container_inline);
 				that.dialog = $('.ui-colorpicker', this.element);
 
 				that._generate();
@@ -2051,7 +2065,8 @@
 				layout_parts;
 
 			// Set color based on element?
-			that._setColor(that.inline? that.options.color : that.element.val());
+
+			that._setColor(that.inline || !that.element.is('input') ? that.options.color : that.element.val());
 
 			// Determine the parts to include in this colorpicker
 			if (typeof that.options.parts === 'string') {
@@ -2085,7 +2100,7 @@
 					}
 				});
 
-				$(_layoutTable(layout_parts, function(cell, x, y) {
+				var table = $(_layoutTable(layout_parts, function(cell, x, y) {
 					var classes = ['ui-colorpicker-' + cell.part + '-container'];
 
 					if (x > 0) {
@@ -2100,7 +2115,10 @@
 						+ (cell.pos[2] > 1 ? ' colspan="' + cell.pos[2] + '"' : '')
 						+ (cell.pos[3] > 1 ? ' rowspan="' + cell.pos[3] + '"' : '')
 						+ ' valign="top"></td>';
-				})).appendTo(that.dialog).addClass('ui-dialog-content ui-widget-content');
+				})).appendTo(that.dialog);
+				if (that.options.inlineFrame) {
+					table.addClass('ui-dialog-content ui-widget-content');
+				}
 
 				that._initAllParts();
 				that._updateAllParts();
@@ -2206,12 +2224,14 @@
 			var that = this;
 
             if (cancel) {
+				that.color = that.currentColor.copy();
                 that._change(that.currentColor.set);
                 that._callback('cancel', true);
             } else {
-                that.changed		= false;
+				that.currentColor	= that.color.copy();
                 that._callback('ok', true);
             }
+			that.changed		= false;
 
 			// tear down the interface
 			that._effectHide(that.dialog, function () {
@@ -2326,7 +2346,7 @@
 					this.color.setRGB(swatch.r, swatch.g, swatch.b);
 					break;
 			}
-
+			
 			// update input element content
 			if (!this.inline) {
 				if (!this.color.set) {
@@ -2362,6 +2382,9 @@
 				this._setImageBackground();
 				this._setAltField();
 			}
+
+			// update color option
+			this.options.color = this.color.set ? this.color.toCSS() : '';
 
 			if (this.opened) {
 				this._repaintAllParts();

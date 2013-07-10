@@ -1,4 +1,4 @@
-jQuery.colorpicker v0.9.8
+jQuery.colorpicker v0.9.9
 
 Copyright (c) 2011-2013 Martijn W. van der Lee
 Licensed under the MIT.
@@ -35,6 +35,10 @@ Options:
 
 	autoOpen:			false
 		If true, the dialog opens automatically upon page load.
+
+	buttonClass:		null
+		If this option is set to a string, the button will be assigned the
+		class specified.
 
 	buttonColorize:		false
 		If a buttonimage is specified, change the background color of the
@@ -121,6 +125,10 @@ Options:
 		a popup instead of inline. Make sure you handle events to catch the
 		color change, otherwise you can't use the color.
 
+	inlineFrame			true
+		If enabled, shows a border and background when inline. Disabling may
+		allow closer integration.
+
 	layout:				{ ... }
 		Set the position of elements in a table layout.
 		You could create any layout possible with HTML tables by specifying
@@ -181,9 +189,9 @@ Options:
 	showNoneButton:		false
 		Show the None/Revert button if buttonpane is visible.
 
-	showOn:				'focus'
+	showOn:				'focus click'
 		Same as jQueryUI DatePicker.
-		Also opens on clicks for non-focusable elements.
+		Optionally 'focus', 'click', 'button' and/or 'both'
 
 	showOptions:		{}
 		Same as jQueryUI DatePicker.

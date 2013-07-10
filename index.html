@@ -48,6 +48,7 @@
 			  <li><a href="#tab-pantone">Custom swatches</a></li>
 			  <li><a href="#tab-hidden-input">Hidden input</a></li>
 			  <li><a href="#tab-plugins">Plugins</a></li>
+			  <li><a href="#tab-buttonImageOnly">buttonImageOnly</a></li>
 			</ul>
 
 			<div id="tab-input">
@@ -106,9 +107,9 @@
 				<h2>Dialog with Colorpicker popup (demonstrates z-index)</h2>
 				<button id="cp-dialog-open">Open dialog</button>
 				<div id="cp-dialog-modal" title="Basic modal dialog">
-					Basic &lt;input&gt; example, without any options: <input type="text" class="cp-basic" value="fe9810"/>
+					Basic &lt;input&gt; example, without any options: <input type="text" class="cp-onclick" value="fe9810"/>
 					<br/>
-					Basic element example, without any options: <span class="cp-basic" style="display: inline-block; vertical-align: top;"></span>
+					Basic element example, without any options: <span class="cp-onclick" style="display: inline-block; vertical-align: top;"></span>
 				</div>
 			</div>
 
@@ -157,6 +158,11 @@
 				</ol>
 				<input type="text" class="cp-plugins" value="#18b7af"/>
 			</div>
+
+			<div id="tab-buttonImageOnly">
+				<h2>Only a button image</h2>
+				<input type="text" class="cp-buttonImageOnly" value="#18b7af"/>
+			</div>
 		</div>
 
 		<script>
@@ -168,7 +174,8 @@
 					showOn: 'both',
 					buttonColorize: true,
 					showNoneButton: true,
-					alpha: true
+					alpha: true,
+					colorFormat: 'RGBA'
 				});
 
 				$('.cp-i18n').colorpicker({
@@ -250,6 +257,10 @@
 									}
 								}
 				});
+                $('.cp-onclick').colorpicker({
+					showOn:			'click',
+					inlineFrame:	false
+				});
 				$('#cp-dialog-open').click(function() {
 					dialogModal.dialog('open');
 				});
@@ -315,6 +326,11 @@
 						rgbslider:	[0, 1, 2, 1],
 						memory:		[0, 2, 2, 1]
 					}
+				});
+
+                $('.cp-buttonImageOnly').colorpicker({
+					showOn:				'both',
+					buttonImageOnly:	true
 				});
 			});
 		</script>
