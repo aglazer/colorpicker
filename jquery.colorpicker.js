@@ -2367,7 +2367,7 @@
                     rgba.a = this.color.getAlpha();
 
 
-                    var scope = angular.element(this.element).scope();
+                    var scope = angular.element(this.element).scope().$parent.$parent;
                     scope.$apply(function(){
                         eval('scope.state.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
                         eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
@@ -2376,7 +2376,7 @@
 //                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba[4])');
                     });
 
-                    scope.saveModifiedViewElement(scope.element);
+                    scope.saveModifiedElement(scope.element);
 				}
 
 				this._setImageBackground();
