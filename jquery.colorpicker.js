@@ -2541,7 +2541,7 @@
                     rgba.a = this.color.getAlpha();
 
 
-                    var scope = angular.element(this.element).scope().$parent.$parent;
+                    var scope = angular.element(this.element).scope().$parent;
                     scope.$apply(function(){
                         eval('scope.state.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
                         eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
