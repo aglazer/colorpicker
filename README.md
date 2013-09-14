@@ -1,6 +1,6 @@
 jQuery.colorpicker
 ==================
-v1.0.3
+v1.0.4
 
 Copyright (c) 2011-2013 Martijn W. van der Lee
 Licensed under the MIT.
@@ -154,6 +154,9 @@ with the modal option. closeOnOutside is redundant when used with modal.
 Determines the functionality of the map and bar components. Allowed
 values are; 'h', 's', 'l', 'r', 'g', 'b' or 'a', for hue, saturation,
 luminosity, red, green, blue and alpha respectively.
+
+###	okOnEnter (false)
+Close the window when pressing the Enter key on the keyboard, keeping the selected color.
 
 ###	parts ('')
 Determine which parts to display.
