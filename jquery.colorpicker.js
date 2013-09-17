@@ -2546,6 +2546,11 @@
                     this.element.val(this._formatColor(this.options.colorFormat, this.color));
 
                     var elementId = this.element[0].id;
+                    var elementName = null;
+                    var elementNameItem = this.element[0].attributes.getNamedItem("element-name");
+                    if (elementNameItem)
+                        elementName = elementNameItem.value;
+
 //                    var rgba = this._formatColor(this.options.colorFormat, this.color);
 //                    rgba = rgba.match(/\d+/g);
 
@@ -2568,8 +2573,10 @@
 //                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba[4])');
                         });
                     }
-
-                    scope.saveModifiedElement(scope.element);
+                    if (elementName && scope[elementName])
+                        scope.saveModifiedElement(scope[elementName]);
+                    else
+                        scope.saveModifiedElement(scope.element);
 				}
 
 				this._setImageBackground();
