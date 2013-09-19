@@ -2551,11 +2551,6 @@
                     if (elementNameItem)
                         elementName = elementNameItem.value;
 
-//                    var rgba = this._formatColor(this.options.colorFormat, this.color);
-//                    rgba = rgba.match(/\d+/g);
-
-//                    var rgbRegex = /(^rgb\((\d+),\s*(\d+),\s*(\d+)\)$)|(^rgba\((\d+),\s*(\d+),\s*(\d+)(,\s*\d+\.\d+)*\)$)/;
-//                    rgba = rgba.match(rgbRegex);
                     var rgba = this.color.getRGB();
                     rgba.r = rgba.r * 255.0;
                     rgba.g = rgba.g * 255.0;
