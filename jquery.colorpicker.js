@@ -2094,7 +2094,7 @@
 					if (that.options.buttonImageOnly && that.image) {
 						that.button = that.image;
 					} else {
-						that.button = $('<button type="button"></button>').html(that.image || that.options.buttonText).button();
+						that.button = $('<button type="button" class="colorPickerButton"></button>').html(that.image || that.options.buttonText).button();
 						that.image = that.image ? $('img', that.button).first() : null;
 					}
 					that.button.insertAfter(that.element).click(function () {
