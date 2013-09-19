@@ -2562,7 +2562,6 @@
                     rgba.b = rgba.b * 255.0;
                     rgba.a = this.color.getAlpha();
 
-
                     var scope = angular.element(this.element).scope();
                     if(scope && !scope.$$phase){
                         scope.$apply(function(){
@@ -2570,7 +2569,6 @@
                             eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
                             eval('scope.state.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
                             eval('scope.state.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
-//                        eval('scope.property.stateProperties.' + elementId + '.a = parseFloat(rgba[4])');
                         });
                     }
                     if (elementName && scope[elementName])
