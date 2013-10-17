@@ -2558,13 +2558,35 @@
                     rgba.a = this.color.getAlpha();
 
                     var scope = angular.element(this.element).scope();
-                    if(scope && !scope.$$phase){
-                        scope.$apply(function(){
-                            eval('scope.state.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
-                            eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
-                            eval('scope.state.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
-                            eval('scope.state.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
+                    if (scope && !scope.$$phase){
+//                        if (!scope.state.stateProperties[elementId] || scope.state.stateProperties[elementId].r) {
+//                            scope.state.stateProperties[elementId].r = 0;
+//                            scope.state.stateProperties[elementId].g = 0;
+//                            scope.state.stateProperties[elementId].b = 0;
+//                            scope.state.stateProperties[elementId].a = 0;
+//                        }
+                        scope.$apply(function() {
+                            var properties = scope.state.stateProperties;
+                            var colorProperty = properties[elementId];
+                            if (!colorProperty) {
+                                properties[elementId] = {r:rgba.r, g:rgba.g, b:rgba.b, a:rgba.a};
+                            }
+
+                            if (colorProperty) {
+                                colorProperty.r = rgba.r;
+                                colorProperty.g = rgba.g;
+                                colorProperty.b = rgba.b;
+                                colorProperty.a = rgba.a;
+                            }
                         });
+
+
+//                        scope.$apply(function(){
+//                            eval('scope.state.stateProperties.' + elementId + '.r = parseFloat(rgba.r)');
+//                            eval('scope.state.stateProperties.' + elementId + '.g = parseFloat(rgba.g)');
+//                            eval('scope.state.stateProperties.' + elementId + '.b = parseFloat(rgba.b)');
+//                            eval('scope.state.stateProperties.' + elementId + '.a = parseFloat(rgba.a)');
+//                        });
                     }
                     if (elementName && scope[elementName])
                         scope.saveModifiedElement(scope[elementName]);
