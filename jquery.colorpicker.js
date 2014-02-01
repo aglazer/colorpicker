@@ -2432,6 +2432,15 @@
 				that.color = that.currentColor.copy();
                 that._change(that.color.set);
                 that._callback('cancel', true);
+
+                var scope = angular.element(this.element).scope();
+                var rootScope = scope.$root;
+
+                if (scope && !scope.$$phase){
+                    rootScope.$broadcast('TL_ViewElement_Colorpicker_Cancel', {element:scope.element});
+                }
+
+
             } else {
 				that.currentColor	= that.color.copy();
                 that._callback('ok', true);
