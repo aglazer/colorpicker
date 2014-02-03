@@ -2409,7 +2409,7 @@
 				});
 
 				//@todo zIndexOffset option, to raise above other elements?
-				that.dialog.css('z-index', zIndex += 2);
+				that.dialog.css('z-index', zIndex += 2000);
 
 				that.overlay = that.options.modal ? new $.ui.dialog.overlay(that) : null;
 
